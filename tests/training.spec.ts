@@ -37,3 +37,34 @@ test('Debe mostrar error con contraseña incorrecta', async ({ page }) => {
     // Lógica de cierre o limpieza si es necesaria
   });
 });
+
+
+test.describe('Módulo de Autenticación SAUCE DEMO', () => {
+      // Hook: Se ejecuta antes de cada test dentro de este bloque describe
+    test.beforeEach(async ({ page }) => {
+        await page.goto('https://www.saucedemo.com/');
+        });
+        
+  test('Debe completar : agregar dos productos', async ({ page }) => {
+        await page.getByRole('textbox', { name: 'Username' }).fill('standard_user');
+        await page.getByRole('textbox', { name: 'Password' }).fill('secret_sauce');
+         await page.getByRole('button', { name: 'Login' }).click();
+
+
+  // Validamos redirección real al catálogo y visibilidad del título
+    await expect(page).toHaveURL(/.*inventory\.html/);
+    await expect(page.getByText('Products')).toBeVisible();
+
+    await page.locator('[data-test="add-to-cart-sauce-labs-backpack"]').click();
+      await page.locator('[data-test="add-to-cart-sauce-labs-bike-light"]').click();
+
+      // Verificar que el ícono del carrito muestre 2 artículos
+      await expect(page.locator('[data-test="shopping-cart-badge"]')).toHaveText('2');
+  });
+
+
+}
+
+
+    
+);
